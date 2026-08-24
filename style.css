@@ -1,0 +1,449 @@
+:root {
+  --blue: #00a4e4;
+  --blue-hover: #0089c1;
+  --blue-soft: rgba(0, 164, 228, 0.10);
+  --purple: #920091;
+  --purple-hover: #78007a;
+  --purple-soft: rgba(146, 0, 145, 0.10);
+  --black: #000000;
+  --gray: #575a5d;
+  --gray-light: #b5b7b4;
+  --line: rgba(181, 183, 180, 0.45);
+  --hover: rgba(87, 90, 93, 0.06);
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--black);
+  font-family: Inter, "Noto Sans KR", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 24px 120px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---- language switch ---- */
+.lang {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+  margin-bottom: 28px;
+}
+
+.lang-btn {
+  border: none;
+  background: transparent;
+  color: var(--gray);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.lang-btn:hover { background: var(--hover); }
+
+.lang-btn[aria-pressed="true"] {
+  color: var(--blue);
+  background: var(--blue-soft);
+}
+
+/* ---- page header ---- */
+.page-icon {
+  font-size: 46px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.quote {
+  margin: 14px 0 30px;
+  padding: 2px 0 2px 14px;
+  border-left: 3px solid var(--black);
+}
+
+.tagline {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--black);
+}
+
+.subline {
+  margin: 3px 0 0;
+  font-size: 15px;
+  color: var(--gray);
+}
+
+/* ---- property row (Notion page property) ---- */
+.props { margin-bottom: 26px; }
+
+.prop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prop + .prop { margin-top: 6px; }
+
+.prop-key {
+  min-width: 92px;
+  color: var(--gray);
+  font-size: 14px;
+}
+
+input[type="date"] {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--black);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+input[type="date"]:hover { background: var(--hover); }
+
+input[type="date"]:focus,
+input.prop-text:focus {
+  outline: none;
+  background: var(--white);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px var(--blue-soft);
+}
+
+/* the word that names the note, e.g. <2026-08-24 노트> */
+input.prop-text {
+  width: 220px;
+  max-width: 100%;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--black);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 4px 6px;
+}
+
+input.prop-text:hover { background: var(--hover); }
+input.prop-text::placeholder { color: var(--gray-light); }
+
+/* ---- subject block (Notion heading + bulleted list) ---- */
+.subjects { border-top: 1px solid var(--line); }
+
+.subject {
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0 10px;
+}
+
+.subject-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.subject-index {
+  flex: 0 0 auto;
+  min-width: 22px;
+  font-size: 13px;
+  color: var(--gray-light);
+}
+
+.subject:hover .subject-index { color: var(--purple); }
+
+/* the title is a Notion Heading 3 that happens to be editable */
+input.subject-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--black);
+  font-family: inherit;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+/* ---- bullets ---- */
+.bullets {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0 0 0 22px;
+}
+
+.bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.bullet-dot {
+  flex: 0 0 auto;
+  padding: 8px 0 0 4px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--gray-light);
+}
+
+.bullet:focus-within .bullet-dot { color: var(--purple); }
+
+textarea.bullet-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--black);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 8px;
+  border-radius: 3px;
+  resize: none;
+  overflow: hidden;
+  display: block;
+}
+
+input.subject-title::placeholder,
+textarea.bullet-text::placeholder { color: var(--gray-light); }
+
+input.subject-title:focus,
+textarea.bullet-text:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--blue);
+}
+
+.invalid-field { background: var(--purple-soft); }
+
+.remove {
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  color: var(--gray-light);
+  font-family: inherit;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 8px 8px;
+  border-radius: 4px;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.remove:hover:enabled { color: var(--purple); background: var(--purple-soft); }
+.remove:disabled { opacity: 0; cursor: default; }
+
+/* ---- add rows, like Notion's "+ New" ---- */
+.row-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--gray);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 9px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.row-add:hover { background: var(--hover); color: var(--black); }
+.row-add .plus { font-size: 16px; color: var(--gray-light); }
+.row-add:hover .plus { color: var(--blue); }
+
+.bullet-add { margin-left: 22px; width: calc(100% - 22px); font-size: 13px; }
+
+.subject-add { border-bottom: 1px solid var(--line); border-radius: 0; }
+
+/* ---- buttons ---- */
+.actions { margin-top: 22px; }
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.btn.primary { background: var(--blue); color: var(--white); }
+.btn.primary:hover { background: var(--blue-hover); }
+
+.btn.ghost {
+  background: var(--white);
+  border-color: var(--line);
+  color: var(--gray);
+}
+
+.btn.ghost:hover { background: var(--hover); color: var(--black); }
+
+.btn.sm { padding: 5px 12px; font-size: 13px; }
+
+/* ---- output ---- */
+.output {
+  margin-top: 40px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.output-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.output-head h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray);
+}
+
+pre#output {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--black);
+  background: var(--hover);
+  border-left: 3px solid var(--purple);
+  border-radius: 3px;
+  padding: 16px 18px;
+}
+
+.output-tools { display: flex; gap: 6px; }
+
+/* ---- toast ---- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 12px);
+  background: var(--black);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---- narrow screens ---- */
+@media (max-width: 600px) {
+  .page { padding: 20px 16px 100px; }
+  .page-title { font-size: 30px; }
+  .quote { padding-left: 12px; }
+  .tagline { font-size: 17px; }
+  .subline { font-size: 14px; }
+
+  .bullets { padding-left: 12px; }
+  .bullet-add { margin-left: 12px; width: calc(100% - 12px); }
+
+  /* iOS zooms the page in when a focused field is under 16px */
+  input.subject-title { font-size: 18px; }
+  textarea.bullet-text,
+  input.prop-text,
+  input[type="date"] { font-size: 16px; }
+
+  /* thumb-sized tap targets */
+  .lang-btn { padding: 8px 12px; font-size: 14px; }
+  .remove { padding: 10px 10px; font-size: 20px; }
+  .row-add { padding: 14px 8px; font-size: 15px; }
+  .bullet-add { font-size: 14px; }
+  textarea.bullet-text { padding: 10px 8px; }
+  .bullet-dot { padding-top: 10px; font-size: 16px; }
+
+  .btn { padding: 13px 16px; font-size: 16px; }
+  .btn.sm { padding: 12px 14px; font-size: 15px; }
+  .actions .btn { width: 100%; }
+
+  /* three labels will not sit beside the heading on a phone */
+  .output-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .output-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .output-tools .btn.primary { grid-column: 1 / -1; order: -1; }
+
+  pre#output { font-size: 16px; }
+
+  .toast { left: 16px; right: 16px; bottom: 16px; transform: translateY(12px); text-align: center; }
+  .toast.show { transform: translateY(0); }
+}
+
+/* ---- print / save as PDF: the note alone, nothing else ---- */
+@media print {
+  body { background: var(--white); }
+
+  .page { max-width: none; padding: 0; }
+
+  .lang, .page-icon, .page-title, .quote, .props,
+  .subjects, .subject-add, .actions, .output-head, .toast { display: none !important; }
+
+  .output {
+    margin: 0;
+    padding: 0;
+    border-top: none;
+  }
+
+  #outputCard[hidden] { display: none !important; }
+
+  pre#output {
+    background: none;
+    border-left: 2px solid var(--black);
+    border-radius: 0;
+    padding: 0 0 0 14px;
+    font-size: 12pt;
+    line-height: 1.7;
+    color: var(--black);
+  }
+
+  @page { margin: 20mm; }
+}

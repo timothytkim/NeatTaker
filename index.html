@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeatNote</title>
+  <meta name="description" content="Write a note as subjects with bullet points and copy it in one tap." />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page">
+
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ko">한국어</button>
+      <button type="button" class="lang-btn" data-lang="en">English</button>
+    </div>
+
+    <div class="page-icon">📝</div>
+    <h1 class="page-title">Neat Note</h1>
+    <blockquote class="quote">
+      <p class="tagline" data-i18n="tagline"></p>
+      <p class="subline" data-i18n="subline"></p>
+    </blockquote>
+
+    <div class="props">
+      <div class="prop">
+        <label class="prop-key" for="dateInput" data-i18n="date"></label>
+        <input type="date" id="dateInput" class="prop-value" />
+      </div>
+      <div class="prop">
+        <label class="prop-key" for="kindInput" data-i18n="kind"></label>
+        <input type="text" id="kindInput" class="prop-value prop-text" list="kindOptions"
+               autocomplete="off" spellcheck="false" data-ph="phKind" />
+        <datalist id="kindOptions"></datalist>
+      </div>
+    </div>
+
+    <div id="subjects" class="subjects"></div>
+
+    <button type="button" id="addSubjectBtn" class="row-add subject-add">
+      <span class="plus">+</span><span data-i18n="addSubject"></span>
+    </button>
+
+    <div class="actions">
+      <button type="button" id="submitBtn" class="btn primary" data-i18n="submit"></button>
+    </div>
+
+    <section class="output" id="outputCard" hidden>
+      <div class="output-head">
+        <h2 data-i18n="output"></h2>
+        <div class="output-tools">
+          <button type="button" id="pdfBtn" class="btn ghost sm" data-i18n="pdf"></button>
+          <button type="button" id="imgBtn" class="btn ghost sm" data-i18n="image"></button>
+          <button type="button" id="copyBtn" class="btn primary sm" data-i18n="copy"></button>
+        </div>
+      </div>
+      <pre id="output"></pre>
+    </section>
+
+  </main>
+
+  <template id="subjectTemplate">
+    <section class="subject">
+      <div class="subject-head">
+        <span class="subject-index"></span>
+        <input type="text" class="subject-title" data-ph="phSubject" autocomplete="off" />
+        <button type="button" class="remove remove-subject" data-aria="removeSubject">&times;</button>
+      </div>
+      <ul class="bullets"></ul>
+      <button type="button" class="row-add bullet-add">
+        <span class="plus">+</span><span data-i18n="addBullet"></span>
+      </button>
+    </section>
+  </template>
+
+  <template id="bulletTemplate">
+    <li class="bullet">
+      <span class="bullet-dot">•</span>
+      <textarea class="bullet-text" rows="1" data-ph="phBullet"></textarea>
+      <button type="button" class="remove remove-bullet" data-aria="removeBullet">&times;</button>
+    </li>
+  </template>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
