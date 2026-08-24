@@ -115,7 +115,7 @@
     langBtns.forEach(function (btn) {
       btn.setAttribute("aria-pressed", String(btn.dataset.lang === next));
     });
-    document.title = "Neat Note";
+    document.title = "Neat Taker";
 
     if (!outputCard.hidden) {
       var text = buildOutput(true);
@@ -530,7 +530,7 @@
 
     ctx.fillStyle = "#b5b7b4";
     ctx.font = "500 26px " + IMG.family;
-    ctx.fillText("Neat Note", IMG.pad, canvas.height - IMG.pad - 26);
+    ctx.fillText("Neat Taker", IMG.pad, canvas.height - IMG.pad - 26);
 
     if (pageCount > 1) {
       ctx.textAlign = "right";

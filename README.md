@@ -1,4 +1,4 @@
-# Neat Note
+# Neat Taker
 
 > 모든 노트를, 가장 단정하게.
 > Every note. Beautifully in line.
@@ -65,7 +65,7 @@ until you type your own word, which is then yours to keep across a switch.
 
 ## Design
 
-Notion's design language, in Neat Note's colors:
+Notion's design language, in Neat Taker's colors:
 
 | | |
 |---|---|
