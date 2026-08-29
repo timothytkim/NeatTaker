@@ -68,6 +68,7 @@
   <template id="subjectTemplate">
     <section class="subject">
       <div class="subject-head">
+        <button type="button" class="drag-handle" data-aria="drag">⠿</button>
         <span class="subject-index"></span>
         <input type="text" class="subject-title" data-ph="phSubject" autocomplete="off" />
         <button type="button" class="remove remove-subject" data-aria="removeSubject">&times;</button>
@@ -81,6 +82,7 @@
 
   <template id="bulletTemplate">
     <li class="bullet">
+      <button type="button" class="drag-handle" data-aria="drag">⠿</button>
       <span class="bullet-dot">•</span>
       <textarea class="bullet-text" rows="1" data-ph="phBullet"></textarea>
       <button type="button" class="remove remove-bullet" data-aria="removeBullet">&times;</button>

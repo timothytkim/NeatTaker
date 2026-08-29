@@ -10,7 +10,7 @@ nothing you type is stored or sent anywhere.
 ## Use
 
 1. Pick the date (defaults to today).
-2. Pick the word that names the note in **종류 / Kind** — 노트, 회의록, 메모, 할 일, 정리,
+2. Pick the word that names the note in **제목 / Title** — 노트, 회의록, 메모, 할 일, 정리,
    일지 are offered, and any other word can be typed straight over them. It is the word
    in the header and the name of the exported file. Leaving it empty falls back to
    노트 / Note.
@@ -22,6 +22,10 @@ nothing you type is stored or sent anywhere.
      comes with its first bullet point already open.
    - The ✕ on the right removes a subject or a bullet point (hidden when only one
      is left).
+   - The ⠿ grip on the left drags a subject or a bullet point to a new position.
+     A bullet point can be dragged into a different subject, not only up and down
+     its own list; the subject it leaves keeps one empty line to type into. With
+     the grip focused, **↑ / ↓** move the row without a mouse.
 4. Press **만들기 / Submit** to render the formatted note.
 5. **복사 / Copy** puts it on the clipboard, **PDF로 저장 / Save as PDF** opens the
    print dialog with everything but the note stripped away, and
@@ -46,7 +50,7 @@ already-submitted note:
 English  <회의록 8/24/26>
 ```
 
-The **종류 / Kind** presets follow the language too, and so does the field itself —
+The **제목 / Title** presets follow the language too, and so does the field itself —
 until you type your own word, which is then yours to keep across a switch.
 
 ## Output format
@@ -78,10 +82,10 @@ Notion's design language, in Neat Taker's colors:
 The two accents come from the logo, and they split the interface the same way it does:
 blue for the controls, purple for the content.
 
-Page icon and title, a quote block for the tagline, the date and the kind as page
+Page icon and title, a quote block for the tagline, the date and the title word as page
 properties, and
 subject blocks built like a Notion Heading 3 with a bulleted list under it — every input
-invisible until focused. Light only — no dark mode. Under 600px the indents tighten and
+invisible until focused, and a grip that fades in on hover. Light only — no dark mode. Under 600px the indents tighten and
 every control grows to a thumb-sized tap target.
 
 ## Image export
@@ -117,6 +121,6 @@ Static site at the repo root — no build step.
 
 - `index.html` — markup, the subject and bullet `<template>`s, and `data-i18n` hooks
 - `style.css` — Notion-style layout, responsive rules, print sheet
-- `script.js` — i18n, the kind presets, add/remove subjects and bullets, formatting,
-  clipboard, image, print
+- `script.js` — i18n, the title presets, add/remove/reorder subjects and bullets,
+  formatting, clipboard, image, print
 - `netlify.toml` — publish directory
