@@ -6,7 +6,7 @@
       tagline: "모든 노트를, 가장 단정하게.",
       subline: "제목을 적고, 내용을 적고, 복사하면 끝.",
       date: "날짜",
-      kind: "종류",
+      kind: "제목",
       kinds: ["노트", "회의록", "메모", "할 일", "정리", "일지"],
       addSubject: "제목 추가",
       addBullet: "내용 추가",
@@ -17,8 +17,9 @@
       image: "이미지로 저장",
       removeSubject: "제목 삭제",
       removeBullet: "내용 삭제",
+      drag: "옮기기",
       phKind: "노트",
-      phSubject: "제목을 입력하세요",
+      phSubject: "소제목을 입력하세요",
       phBullet: "내용을 입력하세요",
       copied: "복사했습니다",
       needSubject: "제목을 입력해주세요",
@@ -32,7 +33,7 @@
       tagline: "Every note. Beautifully in line.",
       subline: "Write a subject. Write the points. Copy it. Done.",
       date: "Date",
-      kind: "Kind",
+      kind: "Title",
       kinds: ["Note", "Meeting Notes", "Memo", "To Do", "Summary", "Log"],
       addSubject: "Add Subject",
       addBullet: "Add Bullet Point",
@@ -43,8 +44,9 @@
       image: "Save as Image",
       removeSubject: "Remove subject",
       removeBullet: "Remove bullet point",
+      drag: "Move",
       phKind: "Note",
-      phSubject: "Write the subject",
+      phSubject: "Write the subheading",
       phBullet: "Write a bullet point",
       copied: "Copied",
       needSubject: "Fill in the subject",
@@ -195,6 +197,8 @@
       autoGrow(field);
     });
 
+    wireHandle(item.querySelector(".drag-handle"), item, "bullet");
+
     // Enter opens the next bullet the way a list does everywhere else;
     // Shift+Enter still breaks the line inside one bullet.
     field.addEventListener("keydown", function (e) {
@@ -237,10 +241,133 @@
       addBullet(subject, true);
     });
 
+    wireHandle(subject.querySelector(".subject-head .drag-handle"), subject, "subject");
+
     subjectsEl.appendChild(node);
     addBullet(subject, false);
     renumber();
     if (focus) titleField.focus();
+  }
+
+  /* ---------- drag to reorder ---------- */
+
+  var drag = null;
+
+  // Which subject's bullet list is under the pointer, so a bullet can be
+  // dragged out of one subject and into another.
+  function bulletsAt(clientY) {
+    var found = null;
+    subjectsEl.querySelectorAll(".subject").forEach(function (subject) {
+      var rect = subject.getBoundingClientRect();
+      if (clientY >= rect.top && clientY <= rect.bottom) found = subject.querySelector(".bullets");
+    });
+    return found;
+  }
+
+  function startDrag(item, kind, event) {
+    if (event.button > 0) return;
+    event.preventDefault();
+
+    drag = {
+      item: item,
+      kind: kind,                 // "subject" | "bullet"
+      list: item.parentNode,
+      sourceList: item.parentNode,
+      pointerY: event.clientY,
+      offset: 0
+    };
+
+    item.classList.add("dragging");
+    document.body.classList.add("dragging-active");
+    // Capture keeps the events coming once the pointer leaves the grip. It is
+    // not essential — the listeners below are on the document — so a browser
+    // that refuses the id must not abort the drag.
+    try { event.currentTarget.setPointerCapture(event.pointerId); } catch (e) {}
+  }
+
+  // The row rides the pointer while its neighbours shuffle underneath it.
+  // Re-inserting the node moves it in the layout too, so the translate offset
+  // is corrected by however far the node just jumped — otherwise the row would
+  // leap out from under the finger on every swap.
+  function moveDrag(clientY) {
+    var item = drag.item;
+
+    if (drag.kind === "bullet") {
+      var over = bulletsAt(clientY);
+      if (over) drag.list = over;
+    }
+
+    var list = drag.list;
+    var target = null;
+    Array.prototype.forEach.call(list.children, function (el) {
+      if (el === item) return;
+      var rect = el.getBoundingClientRect();
+      if (clientY > rect.top + rect.height / 2) target = el;
+    });
+
+    var ref = target ? target.nextElementSibling : list.firstElementChild;
+    if (ref === item) return;
+
+    var before = item.getBoundingClientRect().top;
+    list.insertBefore(item, ref);
+    drag.offset -= item.getBoundingClientRect().top - before;
+    item.style.transform = "translateY(" + drag.offset + "px)";
+
+    if (drag.kind === "subject") renumber();
+  }
+
+  function endDrag() {
+    if (!drag) return;
+
+    drag.item.style.transform = "";
+    drag.item.classList.remove("dragging");
+    document.body.classList.remove("dragging-active");
+
+    if (drag.kind === "bullet") {
+      var source = drag.sourceList.closest(".subject");
+      // a subject is never left without a line to type into
+      if (!drag.sourceList.querySelector(".bullet")) addBullet(source, false);
+      renumberBullets(source);
+      renumberBullets(drag.list.closest(".subject"));
+    }
+
+    renumber();
+    drag = null;
+  }
+
+  document.addEventListener("pointermove", function (event) {
+    if (!drag) return;
+    event.preventDefault();
+    drag.offset += event.clientY - drag.pointerY;
+    drag.pointerY = event.clientY;
+    drag.item.style.transform = "translateY(" + drag.offset + "px)";
+    moveDrag(event.clientY);
+  });
+
+  document.addEventListener("pointerup", endDrag);
+  document.addEventListener("pointercancel", endDrag);
+
+  // The grip is a real button, so it answers to the arrow keys as well.
+  function moveByKey(event, item, kind) {
+    var step = event.key === "ArrowUp" ? -1 : event.key === "ArrowDown" ? 1 : 0;
+    if (!step) return;
+
+    var ref = step < 0
+      ? item.previousElementSibling
+      : (item.nextElementSibling && item.nextElementSibling.nextElementSibling);
+    if (step < 0 ? !item.previousElementSibling : !item.nextElementSibling) return;
+
+    event.preventDefault();
+    var handle = event.currentTarget;
+    item.parentNode.insertBefore(item, ref);
+
+    if (kind === "subject") renumber();
+    handle.focus();
+  }
+
+  function wireHandle(handle, item, kind) {
+    handle.addEventListener("pointerdown", function (event) { startDrag(item, kind, event); });
+    handle.addEventListener("keydown", function (event) { moveByKey(event, item, kind); });
   }
 
   /* ---------- output ---------- */

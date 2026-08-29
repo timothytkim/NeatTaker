@@ -199,11 +199,58 @@ input.subject-title {
   border-radius: 3px;
 }
 
+/* ---- drag handle (Notion's grip) ---- */
+.drag-handle {
+  flex: 0 0 auto;
+  width: 16px;
+  border: none;
+  background: transparent;
+  color: var(--gray-light);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+  padding: 6px 2px;
+  border-radius: 4px;
+  cursor: grab;
+  opacity: 0;
+  /* the pointer must not scroll the page while it is dragging a row */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: opacity 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.subject-head:hover .drag-handle,
+.subject-head:focus-within .drag-handle,
+.bullet:hover .drag-handle,
+.bullet:focus-within .drag-handle,
+.dragging .drag-handle { opacity: 1; }
+
+.drag-handle:hover { color: var(--blue); background: var(--blue-soft); }
+.drag-handle:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; opacity: 1; }
+
+/* lifted off the page, riding the pointer */
+.dragging {
+  position: relative;
+  z-index: 5;
+  background: var(--white);
+  border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+}
+
+.dragging .drag-handle { cursor: grabbing; }
+
+body.dragging-active {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* ---- bullets ---- */
 .bullets {
   list-style: none;
   margin: 4px 0 0;
-  padding: 0 0 0 22px;
+  padding: 0 0 0 18px;
 }
 
 .bullet {
@@ -381,7 +428,10 @@ pre#output {
   .tagline { font-size: 17px; }
   .subline { font-size: 14px; }
 
-  .bullets { padding-left: 12px; }
+  .bullets { padding-left: 8px; }
+
+  /* a phone has no hover, so the grips stay visible */
+  .drag-handle { opacity: 0.5; padding: 10px 4px; width: 20px; font-size: 15px; }
   .bullet-add { margin-left: 12px; width: calc(100% - 12px); }
 
   /* iOS zooms the page in when a focused field is under 16px */
