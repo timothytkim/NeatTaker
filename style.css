@@ -400,7 +400,7 @@ pre#output {
   padding: 16px 18px;
 }
 
-.output-tools { display: flex; gap: 6px; }
+.output-tools { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
 
 /* ---- toast ---- */
 .toast {
@@ -461,6 +461,7 @@ pre#output {
 
   .output-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .output-tools .btn.primary { grid-column: 1 / -1; order: -1; }
+  #notionBtn { grid-column: 1 / -1; }
 
   pre#output { font-size: 16px; }
 

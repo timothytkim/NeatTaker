@@ -27,7 +27,9 @@ nothing you type is stored or sent anywhere.
      its own list; the subject it leaves keeps one empty line to type into. With
      the grip focused, **↑ / ↓** move the row without a mouse.
 4. Press **만들기 / Submit** to render the formatted note.
-5. **복사 / Copy** puts it on the clipboard, **PDF로 저장 / Save as PDF** opens the
+5. **복사 / Copy** puts it on the clipboard, **Notion 형식으로 복사 / Copy as Notion
+   Format** puts it there as Markdown that Notion turns into blocks on paste,
+   **PDF로 저장 / Save as PDF** opens the
    print dialog with everything but the note stripped away, and
    **이미지로 저장 / Save as Image** renders it as a 9:16 PNG.
 
@@ -67,6 +69,19 @@ until you type your own word, which is then yours to keep across a switch.
   • 장소 예약 확인하기.
 ```
 
+### Notion format
+
+The header becomes a Heading 1, each subject a Heading 2, and each bullet point a
+bulleted list item:
+
+```
+# 2026-08-24 노트
+
+## 이번 주 회의
+- 새 학기 일정은 다음 주 월요일에 확정하기로 했습니다.
+- 예산안은 김민수님이 정리해서 목요일까지 공유합니다.
+```
+
 ## Design
 
 Notion's design language, in Neat Taker's colors:
@@ -94,7 +109,7 @@ every control grows to a thumb-sized tap target.
 screen and messenger handles without cropping. The type shrinks toward 32px to keep a
 note on one page; past that it splits into several pages instead of one unreadably tall
 image. A bullet point never straddles a page break, and when a subject's list continues
-onto the next page its title is repeated above it.
+onto the next page its title is repeated above it with **(계속)** / **(cont.)** after it.
 
 On a phone the result goes through the share sheet — the only route into Photos or
 KakaoTalk — and falls back to a download everywhere else.

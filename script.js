@@ -13,6 +13,9 @@
       submit: "만들기",
       output: "결과",
       copy: "복사",
+      notion: "Notion 형식으로 복사",
+      copiedNotion: "Notion 형식으로 복사했습니다",
+      continued: "(계속)",
       pdf: "PDF로 저장",
       image: "이미지로 저장",
       removeSubject: "제목 삭제",
@@ -40,6 +43,9 @@
       submit: "Submit",
       output: "Output",
       copy: "Copy",
+      notion: "Copy as Notion Format",
+      copiedNotion: "Copied in Notion format",
+      continued: "(cont.)",
       pdf: "Save as PDF",
       image: "Save as Image",
       removeSubject: "Remove subject",
@@ -64,6 +70,7 @@
   var addSubjectBtn = document.getElementById("addSubjectBtn");
   var submitBtn = document.getElementById("submitBtn");
   var copyBtn = document.getElementById("copyBtn");
+  var notionBtn = document.getElementById("notionBtn");
   var pdfBtn = document.getElementById("pdfBtn");
   var imgBtn = document.getElementById("imgBtn");
   var outputCard = document.getElementById("outputCard");
@@ -146,6 +153,17 @@
     return lang === "ko"
       ? "<" + date + " " + kind + ">"
       : "<" + kind + " " + date + ">";
+  }
+
+  // Notion turns pasted Markdown into blocks: "#" a Heading 1, "##" a
+  // Heading 2, "-" a bulleted list item.
+  function buildMarkdown(subjects) {
+    var header = buildHeader().replace(/^<|>$/g, "");
+    var blocks = subjects.map(function (s) {
+      var lines = s.bullets.map(function (b) { return "- " + b; });
+      return "## " + s.title + "\n" + lines.join("\n");
+    });
+    return "# " + header + "\n\n" + blocks.join("\n\n");
   }
 
   function todayValue() {
@@ -512,6 +530,8 @@
     var blocks = subjects.map(function (subject) {
       ctx.font = "700 " + titleSize + "px " + IMG.family;
       var titleLines = wrapText(ctx, subject.title, textWidth);
+      // The title as it is repeated atop a page its list runs on to.
+      var contLines = wrapText(ctx, subject.title + " " + t("continued"), textWidth);
 
       ctx.font = "400 " + size + "px " + IMG.family;
       var bullets = subject.bullets.map(function (text) {
@@ -522,6 +542,8 @@
       return {
         titleLines: titleLines,
         titleHeight: titleLines.length * titleLineHeight,
+        contLines: contLines,
+        contHeight: contLines.length * titleLineHeight,
         bullets: bullets
       };
     });
@@ -553,7 +575,7 @@
 
   // Greedy fill. A bullet never straddles a page break, and a subject title is
   // never left stranded at the foot of a page — when its list continues onto
-  // the next page the title is repeated above it.
+  // the next page the title is repeated above it, marked as continued.
   function paginate(plan, bodyHeight) {
     var pages = [];
     var page = [];
@@ -581,8 +603,8 @@
         var gap = i === 0 ? plan.titleGap : plan.bulletGap;
         if (page.length > 1 && used + gap + bullet.height > bodyHeight) {
           flush();
-          page.push({ type: "title", lines: block.titleLines, gapBefore: 0 });
-          used += block.titleHeight;
+          page.push({ type: "title", lines: block.contLines, gapBefore: 0 });
+          used += block.contHeight;
           gap = plan.titleGap;
         }
         page.push({ type: "bullet", lines: bullet.lines, gapBefore: gap });
@@ -778,6 +800,16 @@
   copyBtn.addEventListener("click", function () {
     copyText(outputEl.textContent).then(
       function () { showToast(t("copied")); },
+      function () { showToast(t("copyFail")); }
+    );
+  });
+
+  notionBtn.addEventListener("click", function () {
+    var text = buildOutput();
+    if (text === null) return;
+    outputEl.textContent = text;
+    copyText(buildMarkdown(lastSubjects)).then(
+      function () { showToast(t("copiedNotion")); },
       function () { showToast(t("copyFail")); }
     );
   });
